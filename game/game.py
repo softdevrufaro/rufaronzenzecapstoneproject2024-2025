@@ -7,7 +7,7 @@ class Game:
         self.clock = clock 
         self.width , self.height = self.screen.get_size()
         # Creating the world instance in the game class
-        self.world = World(self.screen , 100 , 100 , self.width , self.height)
+        self.world = World(self.screen , 100 , 100 , self.width , self.height , 42)
 
     def run(self):
         self.playing = True

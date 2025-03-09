@@ -4,27 +4,37 @@ import random
 from .sprites import tree , rock , dirt , grass , empty
 import noise 
 import networkx as nx 
+from .graph_controller import graph_controller
 
 class World: 
 
     # The init method will take the size of the grid and the width and height of the screen
-    def __init__(self , screen , grid_length_x , grid_length_y , width , height ):
+    def __init__(self , screen , grid_length_x , grid_length_y , width , height , seed ):
         self.screen = screen
         self.grid_length_x = grid_length_x
         self.grid_length_y = grid_length_y
         self.width = width 
         self.height = height
+        self.seed = seed
         self.world , self.origin = self.generate_world()
-        self.graph = self.translate_world_to_graph()
+        self.graph_controller =graph_controller(self.world , [tree , rock])
+        
     # Function to initialize the world variable 
     def generate_world(self ):
         world = []
         for x in range(self.grid_length_x):
             temp = []
             for y in range(self.grid_length_y):
-                # COde to generate noise here 
-                determinant = self.fetch_noise(x , y , 10 , 6 , 0.2 , 1.5 , 42)
-                temp.append( [(x , y),determinant])# The co-ordinates on the grid and the value of noise
+                # Code to generate noise here 
+                determinant = self.fetch_noise(x , y , 10 , 6 , 0.2 , 1.5 , self.seed)
+                space_sprite = None
+                if 0 < determinant <= 0.4:
+                    space_sprite = tree
+                elif 0.4 < determinant <= 0.8:
+                    space_sprite = empty
+                elif 0.8 < determinant <= 1.0:
+                    space_sprite = rock
+                temp.append( [(x , y),space_sprite])# The co-ordinates on the grid and the value of noise
             world.append(temp)
 
         origin = [0 , 0]
@@ -56,14 +66,7 @@ class World:
     def display_world(self):
         for x , row in enumerate(self.world): 
             for y ,col in enumerate(row):
-                self.draw_tile(self.origin[0] + x*TILE_SIZE , self.origin[1] + y*TILE_SIZE )
-                sprite = None 
-                if 0 <= self.world[x][y][1] <= 0.4:
-                    sprite = tree
-                elif 0.4 < self.world[x][y][1] <= 0.8:
-                    sprite = empty
-                elif 0.8 < self.world[x][y][1] <= 1.0:
-                    sprite = rock
+                sprite = self.world[x][y][1]
                 self.screen.blit(sprite, (x*TILE_SIZE + self.origin[0] , y*TILE_SIZE + self.origin[1]))
     
     # This function will map the mouse to the game world
