@@ -8,7 +8,7 @@ class oracle:
         self.agents = agents
         self.obstacle_library = obstacle_library
         self.cbs_solution , self.cbs_ma_solution , self.icbs_solution = self.get_solver_solutions()
-        self.best_solver = self.get_optimal_solver()
+        self.best_solver= self.get_optimal_solver()
 
     
     def simplify_world_matrix(self):
@@ -67,8 +67,22 @@ class oracle:
         }
 
         list_of_scores = [cbs_solution_score , cbs_ma_solution_score,icbs_solution_score]
-        best_score = min(list_of_scores)
-        return list_of_scores
+        best_index = min(list_of_scores)
+        best_solver = solution_dictionary[best_index]
+        self.best_paths(best_solver=best_solver)
+        return [best_solver , solution_dictionary , list_of_scores]
+    
+    def best_paths(self , best_solver):
+        ideal_solution = None
+        if best_solver == "cbs":
+            ideal_solution = self.cbs_solution
+        elif best_solver == "cbs_ma":
+            ideal_solution = self.cbs_ma_solution
+        elif best_solver == "icbs":
+            ideal_solution = self.icbs_solution
+        for index , agent in enumerate(self.agents):
+            agent.path = ideal_solution[index]
+
         
 
         

@@ -11,8 +11,8 @@ pg.init()
 pg.mixer.init()
 screen = pg.display.set_mode((0 , 0) , pg.FULLSCREEN)
 # Declaring the row and column variables 
-row = 10
-col = 10
+row = 20
+col = 20
 
 world = []
 
@@ -41,7 +41,7 @@ for x , row in enumerate(world):
 
 obstacles = []
 
-for a in range(10):
+for a in range(100):
     repeat = True 
     while repeat: 
         x = random.randint( 0 , len(world) - 1 )
@@ -77,7 +77,7 @@ class agent:
         self.end_position = end_position
 agents = []
 
-for i in range(20):
+for i in range(10):
     repeat = True 
     while repeat:
         repeat = False 
@@ -104,7 +104,11 @@ for my_agent in agents:
             my_agent.end_position = world[x][y][0]
 
 my_oracle = oracle.oracle(world , agents , [1])
-print(my_oracle.best_solver)
+best_solver  = my_oracle.get_optimal_solver()
+print(best_solver[0])
+print(best_solver[1])
+print(best_solver[2])
+agents = my_oracle.agents
 def main():
     running = True 
     last_time = timer.time()
