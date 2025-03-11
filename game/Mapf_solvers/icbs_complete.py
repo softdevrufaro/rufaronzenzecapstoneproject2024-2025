@@ -4,7 +4,7 @@ import random
 # from single_agent_planner import compute_heuristics, a_star, get_location
 # from multi_agent_planner import ll_solver, get_sum_of_cost, compute_heuristics, get_location
 
-from a_star_class import A_Star, get_sum_of_cost, compute_heuristics, get_location
+from .a_star_class import A_Star, get_sum_of_cost, compute_heuristics, get_location
 
 import copy
 

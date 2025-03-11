@@ -1,7 +1,7 @@
 import time as timer
 import heapq
 import random
-from multi_agent_planner import ma_star,get_sum_of_cost, compute_heuristics, get_location
+from .multi_agent_planner import ma_star,get_sum_of_cost, compute_heuristics, get_location
 import copy
 
 import numpy

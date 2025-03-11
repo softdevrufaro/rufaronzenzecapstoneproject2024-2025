@@ -3,7 +3,7 @@ import time as timer
 import heapq
 import random
 
-from a_star_class import A_Star, get_location, get_sum_of_cost, compute_heuristics
+from .a_star_class import A_Star, get_location, get_sum_of_cost, compute_heuristics
 
 def detect_collision(path1, path2):
     ##############################

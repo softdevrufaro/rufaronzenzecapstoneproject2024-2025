@@ -1,4 +1,7 @@
-from .MAPF_solvers import CBS , CBS_MA , icbs_complete
+from MAPF_solvers.a_star_class import A_Star, get_location, get_sum_of_cost, compute_heuristics
+from MAPF_solvers.CBS import CBSSolver
+from MAPF_solvers.CBS_MA import CBS_MASolver
+from MAPF_solvers.icbs_complete import ICBS_Solver
 class oracle: 
     def __init__(self , world , agents , obstacle_library):
         self.world = world 
@@ -24,28 +27,25 @@ class oracle:
             print(f"Something went wrong ({e})")
     
     def fetch_start_and_goal_positions(self):
-        try:
-            start = []
-            goal = []
-            for agent in self.agents:
-                start.append(agent.start)
-                goal.append(agent.goal)
+        start = []
+        goal = []
+        for agent in self.agents:
+            start.append(agent.position)
+            goal.append(agent.end_position)
             
-            return start , goal
-        except Exception as e: 
-            print(f"Something went wrong ({e})")
+        return start , goal
     
     def get_solver_solutions(self):
         world_simplified = self.simplify_world_matrix()
         starts , goals = self.fetch_start_and_goal_positions()
         # Initializing the solvers below
-        cbs_solver = CBS.CBSSolver(world_simplified , starts , goals)
-        cbs_ma_solver = CBS_MA.CBS_MASolver(world_simplified , starts , goals)
-        icbs_solver = icbs_complete.ICBS_Solver(world_simplified , starts , goals)
+        cbs_solver = CBSSolver(world_simplified , starts , goals)
+        cbs_ma_solver = CBS_MASolver(world_simplified , starts , goals)
+        icbs_solver = ICBS_Solver(world_simplified , starts , goals)
         # fetching the solutions
-        cbs_solution , cbs_num , cbs_expansion = cbs_solver.find_solution(disjoint=False)
-        cbs_ma_solution , cbs_ma_num , cbs_ma_expansion = cbs_ma_solver.find_solution(disjoint=False)
-        icbs_solution, icbs_num , icbs_expansion = icbs_solver.find_solution(disjoint=False)
+        cbs_solution , cbs_num , cbs_expansion = cbs_solver.find_solution(disjoint=True)
+        cbs_ma_solution , cbs_ma_num , cbs_ma_expansion = cbs_ma_solver.find_solution(disjoint=True)
+        icbs_solution, icbs_num , icbs_expansion = icbs_solver.find_solution(disjoint=True)
 
         return cbs_solution , cbs_ma_solution , icbs_solution
     
@@ -68,7 +68,7 @@ class oracle:
 
         list_of_scores = [cbs_solution_score , cbs_ma_solution_score,icbs_solution_score]
         best_score = min(list_of_scores)
-        return solution_dictionary[best_score]
+        return list_of_scores
         
 
         
