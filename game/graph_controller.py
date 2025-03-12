@@ -3,10 +3,12 @@ import networkx as nx
 class graph_controller: 
     def __init__(self , world , obstacle_library):
         self.world = world
-        self.graph_object = self.convert_grid_to_graph()
-        self.world_size = (len(world) , len(world[0]))
         self.obstacle_library = obstacle_library
         self.obstacles = self.fetch_obstacles()
+        self.graph_object = self.convert_grid_to_graph()
+        self.world_size = (len(world) , len(world[0]))
+        
+
     
     def convert_grid_to_graph(self):
         """
@@ -34,11 +36,11 @@ class graph_controller:
                     if (x != 0) and (y != len(row)-1):
                         G.add_edge(world[x][y][0] , world[x-1][y+1][0] , weight = 1.21) 
             obstacles = self.fetch_obstacles()
-            G = self.disconnect_obstacles(obstacles=obstacles, G=G)
+            if len(obstacles)>= 1: 
+                G = self.disconnect_obstacles(obstacles=obstacles, G=G)
             return G
         except Exception as e: 
-            print(f"Something went wrong [{e}]")
-            return None
+            return e
     
     def disconnect_obstacles(self , obstacles , G):
         """
