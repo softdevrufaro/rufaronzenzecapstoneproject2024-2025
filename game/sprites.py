@@ -2,7 +2,7 @@ import pygame as pg
 from .spritesheet import SpriteSheet
 
 #Loading the spritesheet 
-my_spritesheet = SpriteSheet("basebuilder1\\assets\\colored_packed.png")
+my_spritesheet = SpriteSheet("assets\\colored_packed.png")
 
 tree = my_spritesheet.get_sprite(0 , 16 , 16 , 16)
 rock = my_spritesheet.get_sprite(81 , 32 , 16 , 16)
